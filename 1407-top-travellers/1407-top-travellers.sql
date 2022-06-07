@@ -1,0 +1,2 @@
+# Write your MySQL query statement below
+select u.name, coalesce(sum(distance),0) as travelled_distance from rides as r right join users as u on u.id = r.user_id group by r.user_id order by travelled_distance desc, name asc
