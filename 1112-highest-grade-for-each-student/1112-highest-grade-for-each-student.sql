@@ -1,8 +1,13 @@
-with temp as
-(
-select student_id,max(grade) as grade from enrollments group by student_id
-)
-select temp.student_id, min(e.course_id) as course_id, temp.grade from temp left join enrollments as e on e.student_id=temp.student_id and e.grade=temp.grade group by 1 order by student_id asc;
 
 
+With temp AS
+(SELECT student_id, MAX(grade) AS grade
+FROM Enrollments
+GROUP BY 1)
 
+SELECT temp.student_id, MIN(e.course_id) AS course_id, temp.grade
+FROM temp
+LEFT JOIN Enrollments e
+ON e.student_id = temp.student_id AND e.grade = temp.grade
+GROUP BY 1
+ORDER BY 1;
