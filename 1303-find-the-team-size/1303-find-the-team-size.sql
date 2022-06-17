@@ -1,3 +1,12 @@
-# Write your MySQL query statement below
-
-select employee_id, count(1) over(partition by team_id) as team_size from Employee;
+SELECT
+E.EMPLOYEE_ID,
+T1.TEAM_SIZE
+FROM EMPLOYEE AS E JOIN 
+    (
+        SELECT
+        TEAM_ID,
+        COUNT(*) AS TEAM_SIZE
+        FROM EMPLOYEE 
+        GROUP BY TEAM_ID 
+    ) AS T1 
+ON T1.TEAM_ID = E.TEAM_ID 
