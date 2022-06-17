@@ -1,11 +1,1 @@
-SELECT
-    Name
-FROM
-    Employee AS t1 JOIN
-    (SELECT
-        ManagerId
-    FROM
-        Employee
-    GROUP BY ManagerId
-    HAVING COUNT(ManagerId) >= 5) AS t2
-    ON t1.Id = t2.ManagerId
+Select name from employee as e join ( select managerId, count(*) as cnt from employee group by managerId having cnt >=5) as f on f.managerId = e.id
