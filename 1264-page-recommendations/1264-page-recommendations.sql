@@ -1,10 +1,5 @@
-#identify all friends of user 1
-WITH cte AS (SELECT user2_id FROM Friendship WHERE user1_id = 1
-UNION
-SELECT user1_id FROM Friendship WHERE user2_id = 1 )
-
-
-SELECT distinct page_id as recommended_page FROM likes
-WHERE user_id in (select * from cte)
-and page_id not in (SELECT page_id FROM likes where user_id =1)
-
+select distinct b.page_id as recommended_page
+from Friendship a
+inner join likes b
+on a.user1_id = b.user_id or a.user2_id = b.user_id
+where (a.user1_id = 1 or a.user2_id = 1) and b.page_id not in (select page_id from likes where user_id = 1)
