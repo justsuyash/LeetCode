@@ -1,3 +1,15 @@
-# Write your MySQL query statement below
-select Department, Employee, Salary from (
-select e.id,e.name as Employee,salary, dense_rank() over(partition by departmentId order by salary desc) as rnk, d.name as Department from employee as e join department as d on e.departmentId = d.id order by e.name ) as a where rnk =1 ;
+SELECT
+    Department,
+    Employee,
+    Salary
+FROM (SELECT
+        emp.name AS Employee,
+        dep.name AS Department,
+        emp.salary AS Salary,
+        RANK() OVER (PARTITION BY departmentId
+                     ORDER BY salary DESC) AS sal_rank
+      FROM Employee AS emp
+      JOIN Department as dep
+        ON dep.id = emp.departmentId
+     ) AS dep_sals
+WHERE dep_sals.sal_rank = 1;
