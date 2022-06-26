@@ -1,15 +1,19 @@
 SELECT
-    Department,
-    Employee,
-    Salary
-FROM (SELECT
-        emp.name AS Employee,
-        dep.name AS Department,
-        emp.salary AS Salary,
-        RANK() OVER (PARTITION BY departmentId
-                     ORDER BY salary DESC) AS sal_rank
-      FROM Employee AS emp
-      JOIN Department as dep
-        ON dep.id = emp.departmentId
-     ) AS dep_sals
-WHERE dep_sals.sal_rank = 1;
+    d.name as Department,
+    e.name as Employee,
+    e.salary as Salary
+FROM
+    (
+        SELECT 
+            departmentID,
+            MAX(salary) as Salary
+        FROM
+            Employee
+        GROUP BY
+            departmentID
+    ) intq
+    JOIN Department d ON intq.departmentID = d.id
+    JOIN Employee e on e.departmentID = d.id AND e.Salary = intq.Salary
+ORDER BY
+    Department, 
+    Employee
