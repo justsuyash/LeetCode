@@ -1,7 +1,12 @@
-# Write your MySQL query statement below
-select co.country_name,
-
-(case when avg(weather_state)<=15 then 'Cold' 
-     when avg(weather_state)>=25 then 'Hot' 
-     else 'Warm' end) as weather_type
-     from weather as w join countries as co on w.country_id=co.country_id where w.day between '2019-11-01' and '2019-11-30' group by w.country_id;
+SELECT
+    coun.country_name,
+    (CASE
+        WHEN AVG(weath.weather_state) <= 15 THEN 'Cold'
+        WHEN AVG(weath.weather_state) >= 25 THEN 'Hot'
+        ELSE 'Warm'
+    END) AS weather_type
+FROM Countries AS coun
+LEFT JOIN Weather AS weath
+    ON weath.country_id = coun.country_id
+WHERE DATE_FORMAT(weath.day, '%Y-%m') = '2019-11'
+GROUP BY country_name;
