@@ -1,0 +1,2 @@
+# Write your MySQL query statement below
+select name as 'Employee' from ( select a.name, a.salary as 'empsal', b.salary as 'mansal' from employee as a join employee as b on a.ManagerId = b.id) as l where l.empsal>l.mansal
