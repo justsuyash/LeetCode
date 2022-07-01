@@ -1,9 +1,17 @@
-# Write your MySQL query statement below
-SELECT a.visited_on AS visited_on, SUM(b.day_sum) AS amount,
-       ROUND(AVG(b.day_sum), 2) AS average_amount
-FROM
-  (SELECT visited_on, SUM(amount) AS day_sum FROM Customer GROUP BY visited_on ) a,
-  (SELECT visited_on, SUM(amount) AS day_sum FROM Customer GROUP BY visited_on ) b
-WHERE DATEDIFF(a.visited_on, b.visited_on) BETWEEN 0 AND 6
-GROUP BY a.visited_on
-HAVING COUNT(b.visited_on) = 7
+with cte as 
+(
+select visited_on, sum(amount) as amount, 
+       row_number() over (order by visited_on) as row_num
+  from Customer
+group by 1
+) 
+
+,cte2 as 
+
+(
+select visited_on, sum(amount) over(order by visited_on Rows between 6 preceding and current row )as ma_sum, avg(amount) over(order by visited_on Rows between 6 preceding and current row )as ma_avg, row_num from cte
+
+
+)
+
+select visited_on, ma_sum as amount, round(ma_avg,2) as average_amount from cte2 where row_num >=7
