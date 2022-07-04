@@ -1,14 +1,9 @@
-with e as (
-select e.*,
-case when operator = '>' then a.value > b.value
-when operator = '<' then a.value < b.value
-when operator = '=' then a.value = b.value
-end as value_num
-from expressions e
-left join variables a on a.name = e.left_operand
-left join variables b on b.name = e.right_operand
-)
-select e.left_operand, e.operator, e.right_operand,
-case when value_num is True then 'true'
-else 'false' end as 'value'
-from e
+with cte as (select left_operand,operator,right_operand,
+case when t2.value -t3.value >0 then '>'
+when t2.value -t3.value <0 then '<'
+else '=' end as value
+from expressions t1
+left join variables t2 on t2.name = t1.left_operand
+left join variables t3 on t3.name = t1.right_operand)
+
+select left_operand,operator,right_operand, if(value = operator,'true','false') as value from cte
