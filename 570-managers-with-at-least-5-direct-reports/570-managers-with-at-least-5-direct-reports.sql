@@ -1,2 +1,1 @@
-select name  from (
-select  managerId,count(managerId) as cnt from Employee group by managerId) as a join employee as e on e.id=a.managerId where cnt>=5  ;
+select name from Employee where id in (select managerId from (select managerId,count(*) as cnt from Employee group by managerId having cnt>=5) as a);
