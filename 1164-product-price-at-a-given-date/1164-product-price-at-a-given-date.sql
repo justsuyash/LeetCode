@@ -1,19 +1,4 @@
-SELECT
-    DISTINCT product_id,
-    10 AS price
-FROM Products
-GROUP BY product_id
-HAVING (MIN(change_date) > "2019-08-16")
-UNION
-SELECT
-    prod_2.product_id,
-    new_price AS price
-FROM Products AS prod_2
-WHERE (prod_2.product_id, prod_2.change_date) IN
-(SELECT
-    product_id,
-    MAX(change_date) AS change_date
-FROM Products
-WHERE change_date <= "2019-08-16"
-GROUP BY product_id
-)
+SELECT product_id, ifnull(new_price,10) price FROM (SELECT product_id,new_price,row_number() over(partition by product_id ORDER BY change_date DESC) as r FROM Products
+WHERE change_date<='2019-08-16') T RIGHT JOIN (SELECT DISTINCT product_id FROM Products)
+AS Pid_t USING (product_id)
+WHERE r=1 or r is null
