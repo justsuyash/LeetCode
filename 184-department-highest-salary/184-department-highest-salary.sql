@@ -1,4 +1,2 @@
-select department, employee, salary from 
-(
-select e.id as eid, e.name as employee, e.salary as salary, dense_rank() over(partition by departmentId order by salary desc) as rnk, e.departmentId, d.id,d.name as department from Employee as e join department as d on e.departmentId = d.id
-) as a where rnk =1;
+select e.name as Department, d.name as Employee, a.salary as Salary from (select max(salary) as salary, departmentId from Employee group by departmentId) as a join employee as e on e.departmentId=a.departmentId and e.salary=a.salary
+join department as d on a.departmentid = d.id;
