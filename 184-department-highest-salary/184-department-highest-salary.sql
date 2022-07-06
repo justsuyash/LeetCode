@@ -1,2 +1,19 @@
-select e.name as Department, d.name as Employee, a.salary as Salary from (select max(salary) as salary, departmentId from Employee group by departmentId) as a join employee as e on e.departmentId=a.departmentId and e.salary=a.salary
-join department as d on a.departmentid = d.id;
+SELECT
+    d.name as Department,
+    e.name as Employee,
+    e.salary as Salary
+FROM
+    (
+        SELECT 
+            departmentID,
+            MAX(salary) as Salary
+        FROM
+            Employee
+        GROUP BY
+            departmentID
+    ) intq
+    JOIN Department d ON intq.departmentID = d.id
+    JOIN Employee e on e.departmentID = d.id AND e.Salary = intq.Salary
+ORDER BY
+    Department, 
+    Employee
