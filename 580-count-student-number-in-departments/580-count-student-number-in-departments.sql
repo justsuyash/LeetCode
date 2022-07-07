@@ -1,2 +1,1 @@
-# Write your MySQL query statement below
-select dept_name, count(student_id) as student_number from student as s right join department as d on s.dept_id = d.dept_id group by d.dept_id order by student_number desc, dept_name
+select ifnull(dept_name,0) as dept_name,ifnull(countstu,0) as student_number from (select count(student_id) as countstu, dept_id from Student group by dept_id) as s right join department as d on d.dept_id=s.dept_id order by 2 desc,dept_name
